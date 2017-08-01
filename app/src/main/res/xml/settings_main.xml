@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings_title">
+    <PreferenceCategory android:title="@string/setting_app_category"
+        >
+
+        <ListPreference
+            android:defaultValue="@string/order_by_default"
+            android:key="@string/order_by_key"
+            android:title="@string/order_by_title"
+            android:entries="@array/order_by_labels"
+            android:entryValues="@array/order_by_values"
+            />
+        <SwitchPreference
+            android:key="@string/auto_sync_key"
+            android:title="@string/auto_sync_title"
+            android:defaultValue="@string/auto_sync_dafault_value"
+            />
+        <ListPreference
+            android:defaultValue="@string/auto_sync_period_choose_default"
+            android:key="@string/auto_sync_period_choose_key"
+            android:title="@string/auto_sync_period_choose_title"
+            android:dependency="@string/auto_sync_key"
+            android:entries="@array/auto_sync_period_labels"
+            android:entryValues="@array/auto_sync_period_values"/>
+    </PreferenceCategory>
+    <Preference
+        android:key="drive"
+        android:title="Save to Drive"
+        android:summary="This will save current working sheet to drive"/>
+</PreferenceScreen>

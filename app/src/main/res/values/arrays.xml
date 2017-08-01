@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="order_by_labels">
+        <item>@string/order_by_asc_label</item>
+        <item>@string/order_by_desc_label</item>
+    </string-array>
+    <string-array name="order_by_values">
+        <item>@string/order_by_asc_value</item>
+        <item>@string/order_by_desc_value</item>
+    </string-array>
+    <string-array name="auto_sync_period_labels">
+        <item>@string/auto_sync_period_weekly</item>
+        <item>@string/auto_sync_period_monthly</item>
+    </string-array>
+    <string-array name="auto_sync_period_values">
+        <item>@string/auto_sync_period_weekly_value</item>
+        <item>@string/auto_sync_period_monthly_value</item>
+    </string-array>
+</resources>
