@@ -3,6 +3,7 @@ package com.example.android.rawtodispatch;
 import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +30,10 @@ import com.example.android.rawtodispatch.fragments.*;
 import android.content.pm.PackageManager;
 import android.widget.Toast;
 
-public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     private TabLayout tabLayout;
@@ -50,7 +54,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     String[] permissionsRequired=new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
             ,Manifest.permission.GET_ACCOUNTS};
 
-    private SharedPreferences permissionStatus;
+    private SharedPreferences preferences;
 
     private boolean sentToSettings = false;
 
@@ -60,7 +64,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
 
     private View view;
 
-
+    private SharedPreferences sharedPreference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,10 +76,10 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
 
         view=findViewById(R.id.main_layout);
 
-        permissionStatus=getSharedPreferences("permissionStatus",MODE_PRIVATE);
-
+        preferences=getSharedPreferences("permissionStatus",MODE_PRIVATE);
+        sharedPreference= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         getSupportActionBar().setTitle(CONTENT_URI.getLastPathSegment().toUpperCase());
-
+        preferences.registerOnSharedPreferenceChangeListener(this);
         /*Setting up viewpager with fragments*/
         setUpViewPager(viewPager);
 
@@ -89,7 +93,19 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         /*Setting on TabSelectedLitner to change the color of the tab and modifying the CONTENT_URI*/
         tabLayout.setOnTabSelectedListener(this);
 
+        setPreferenceFileName();
         Log.v(LOG_TAG,"On Create completed");
+    }
+
+    private void setPreferenceFileName(){
+
+        SharedPreferences.Editor editor=sharedPreference.edit();
+        SimpleDateFormat month_date = new SimpleDateFormat("MMMM");
+        String month_name = month_date.format(Calendar.getInstance().getTime());
+        String fileName=getResources().getString(R.string.app_name)+"-"+month_name;
+        editor.putString(getString(R.string.file_name),fileName);
+        editor.commit();
+
     }
 
     @Override
@@ -102,7 +118,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
         if (id==R.id.settings_option){
-            startActivity(new Intent(this,SettingsActivity.class));
+            startActivity(new Intent(this,UtilitiesActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -120,7 +136,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
 
                     //requesting permission
                     requestRequiresPermissions();
-                    SharedPreferences.Editor editor = permissionStatus.edit();
+                    SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean(permissionsRequired[0],true);
                     editor.commit();
                 }else {
@@ -175,7 +191,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
             // For example if the user has previously denied the permission.
             showSnackBarToRequestPermission();
 
-        }else if (permissionStatus.getBoolean(permissionsRequired[0],false)){
+        }else if (preferences.getBoolean(permissionsRequired[0],false)){
 
             //Previously Permission Request was cancelled with 'Dont Ask Again',
             // Redirect to Settings after showing Information about why you need the permission
@@ -279,6 +295,21 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.file_name))){
+            deleteTables();
+
+        }
+    }
+
+    private void deleteTables() {
+        getContentResolver().delete(DataContract.RawEntry.CONTENT_URI,null,null);
+        getContentResolver().delete(DataContract.FinishEntry.CONTENT_URI,null,null);
+        getContentResolver().delete(DataContract.DispatchEntry.CONTENT_URI,null,null);
 
     }
 }
