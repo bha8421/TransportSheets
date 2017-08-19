@@ -110,7 +110,7 @@
             android:id="@+id/relativeLayout_for_sd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone">
+            >
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/inputLayout_source"
                 android:layout_width="wrap_content"
@@ -121,14 +121,13 @@
                 android:nextFocusUp="@id/inputLayout_destination"
                 android:layout_marginRight="10dp"
                 android:textColorHint="@color/colorAccent">
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/input_source"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_source"
-                    android:inputType="text"
-
-                    />
+                    app:theme="@style/Autocomplete"
+                    android:inputType="text"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/inputLayout_destination"
@@ -137,38 +136,66 @@
                 android:layout_alignParentRight="true"
                 android:textColorHint="@color/colorAccent"
                 >
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/input_destination"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_destination"
                     android:inputType="text"
                     android:gravity="start"
+                    app:theme="@style/Autocomplete"
                     android:layout_gravity="start" />
             </android.support.design.widget.TextInputLayout>
         </RelativeLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/inputLayout_date"
+        <RelativeLayout
+            android:id="@+id/relativeLayout_for_dates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/colorAccent">
-            <EditText
-                android:id="@+id/input_date"
-                android:layout_width="match_parent"
+            >
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayout_date"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Date"
-                android:focusable="false"
-                android:inputType="date"
-                android:imeOptions="actionDone"
-                android:nextFocusLeft="@id/input_date"
-                android:nextFocusUp="@id/input_date" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_toLeftOf="@+id/inputLayout_dateUnload"
+                android:layout_alignParentLeft="true"
+                android:nextFocusLeft="@id/inputLayout_dateUnload"
+                android:nextFocusUp="@id/inputLayout_dateUnload"
+                android:layout_marginRight="10dp"
+                android:textColorHint="@color/colorAccent">
+                <EditText
+                    android:id="@+id/input_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_date"
+                    android:focusable="false"
+                    android:inputType="date"
+                    android:imeOptions="actionDone"
+                    />
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayout_dateUnload"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textColorHint="@color/colorAccent"
+                >
+                <EditText
+                    android:id="@+id/input_dateUnload"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:hint="@string/hint_unload_date"
+                    android:inputType="date"
+                    android:gravity="start"
+                    android:layout_gravity="start" />
+            </android.support.design.widget.TextInputLayout>
+        </RelativeLayout>
         <Button
             android:id="@+id/submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Submit"
+            android:text="@string/button_submit"
             android:background="@color/colorPrimary"
             android:textColor="@color/white"
             />
